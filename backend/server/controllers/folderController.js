@@ -1,6 +1,6 @@
 import Folder from "../models/Folder.js";
 
-const createFolder = async(req,res)=>{
+export const createFolder = async(req,res)=>{
   try{
     const{name,parentFolder} = req.body;
     if(!name){
