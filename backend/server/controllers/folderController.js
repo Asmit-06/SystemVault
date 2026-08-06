@@ -44,3 +44,16 @@ export const getFolders = async(req,res)=>{
     res.status(500).json({message: "Server Error"});
   }
 }
+
+export const getFolderById = async(req,res)=>{
+  try{
+    const folder = await Folder.findOne({_id:req.params.id, owner:req.userId});
+    if(!folder){
+      return res.status(404).json({message: "Folder not Found"});
+    }
+    return res.status(200).json(folder);
+  }catch(err){
+    console.error(err);
+    res.status(500).json({message: "Server Error"}); 
+  }
+}
