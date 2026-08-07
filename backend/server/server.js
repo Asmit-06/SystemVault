@@ -4,6 +4,7 @@ import ConnectDB from "./config/db.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/api/auth",authRoutes);
 app.use("/api/folder",folderRoutes);
-
+app.use("/api/file",fileRoutes);
 
 
 const PORT = process.env.PORT || 3000;
