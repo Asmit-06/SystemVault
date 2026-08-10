@@ -1,14 +1,9 @@
 import express from 'express';
 import {protect} from '../middleware/protect.js';
 import upload from '../middleware/upload.js';
+import { uploadFile } from '../controllers/fileController.js'
 
 const router = express.Router();
-router.post("/upload",protect,upload.single("file"),(req, res) => {
-  console.log(req.file);
+router.post("/upload",protect,upload.single("file"),uploadFile);
 
-  res.status(200).json({
-    message: "File received successfully",
-    file: req.file
-  });
-})
 export default router;
