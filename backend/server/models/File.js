@@ -31,7 +31,10 @@ const fileSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-
+  publicId:{
+    type: String,
+    required: true
+  }
 },{ timestamps: true})
 
 const File = mongoose.model("File", fileSchema);

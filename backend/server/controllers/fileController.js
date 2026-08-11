@@ -38,7 +38,8 @@ export const uploadFile = async (req, res) => {
       fileType: req.file.mimetype,
       mimeType: req.file.mimetype,
       size: req.file.size,
-      folder:folderId
+      folder:folderId,
+      publicId: cloudinaryResponse.public_id,
     });
 
     return res
@@ -51,3 +52,58 @@ export const uploadFile = async (req, res) => {
       .json({ message: "Error uploading file", error: err.message });
   }
 };
+
+export const getFiles = async(req,res)=>{
+  try{
+    const {folderId} = req.query;
+    if(!folderId){
+      return res.status(400).json({message:"Folder ID is required"})
+    }
+    const folder = await Folder.findOne({_id:folderId,owner:req.userId});
+    if(!folder){
+      return res.status(404).json({message:"Folder not found"})
+    }
+    const files = await File.find({owner:req.userId,folder:folderId});
+    return res.status(200).json({files})
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error fetching files",error:err.message})
+  }
+}
+
+export const getFileById = async(req,res)=>{
+  try{
+    const file  = await File.findOne({_id:req.params.id,owner:req.userId});
+    if(!file){
+      return res.status(404).json({message:"File not found"})
+    }
+    return res.status(200).json({file})
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error fetching file",error:err.message})
+  }
+}
+
+export const updateFile = async(req,res)=>{
+  try{
+    const file = await File.findOne({_id:req.params.id,owner:req.userId});
+    if(!file){
+      return res.status(404).json({message:"File not found"})
+    }
+    const {name} = req.body;
+    if(!("name" in req.body) || !name.trim()){
+      return res.status(400).json({message:"File name is required"})
+    }
+    if(name){
+      file.name = name.trim();
+    }
+    const updatedFile = await file.save();
+    return res.status(200).json({message:"File updated successfully",file:updatedFile})
+
+
+
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error updating file",error:err.message})
+  }
+}
