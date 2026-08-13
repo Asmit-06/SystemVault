@@ -62,7 +62,7 @@ export const getFiles = async (req, res) => {
     if (!folder) {
       return res.status(404).json({ message: "Folder not found" });
     }
-    const files = await File.find({ owner: req.userId, folder: folderId });
+    const files = await File.find({ owner: req.userId, folder: folderId, isDeleted: false });
     return res.status(200).json({ files });
   } catch (err) {
     console.error(err);
@@ -74,7 +74,7 @@ export const getFiles = async (req, res) => {
 
 export const getFileById = async (req, res) => {
   try {
-    const file = await File.findOne({ _id: req.params.id, owner: req.userId });
+    const file = await File.findOne({ _id: req.params.id, owner: req.userId, isDeleted: false });
     if (!file) {
       return res.status(404).json({ message: "File not found" });
     }
@@ -119,11 +119,11 @@ export const deleteFile = async (req, res) => {
       return res.status(404).json({ message: "File not found" });
     }
 
-    const { publicId } = file;
-    if (publicId) {
-      await cloudinary.uploader.destroy(publicId);
-    }
-    await file.deleteOne();
+    // const { publicId } = file;
+    
+    file.isDeleted = true;
+    file.deletedAt = new Date();
+    await file.save();
     return res.status(200).json({ message: "File deleted successfully" });
   } catch (err) {
     console.error(err);
@@ -147,9 +147,7 @@ export const downloadFile = async (req, res) => {
     }
 
     const response = await fetch(file.fileUrl);
-    console.log("Cloudinary URL:", file.fileUrl);
-    console.log("Cloudinary status:", response.status);
-    console.log("Cloudinary status text:", response.statusText);
+   
     if (!response.ok) {
       throw new Error("Failed to fetch file from Cloudinary");
     }
@@ -167,3 +165,14 @@ export const downloadFile = async (req, res) => {
     });
   }
 };
+
+
+export const getTrash = async(req,res)=>{
+  try{
+    const files = await File.find({owner:req.userId,isDeleted:true}).sort({deletedAt:-1});
+    return res.status(200).json({files});
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error fetching trash",error:err.message});
+  }
+}

@@ -34,16 +34,16 @@ const fileSchema = new mongoose.Schema({
   publicId:{
     type: String,
     required: true
+  },
+  isDeleted:{
+    type: Boolean,
+    default: false
+  },
+  deletedAt:{
+    type: Date,
+    default: null
   }
 },{ timestamps: true})
 
 const File = mongoose.model("File", fileSchema);
 export default File;
-// name
-// owner
-// folder
-// fileUrl
-// fileType
-// mimeType
-// size
-// date
