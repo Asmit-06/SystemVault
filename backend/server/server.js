@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -16,8 +17,7 @@ app.use(express.json());
 app.use("/api/auth",authRoutes);
 app.use("/api/folder",folderRoutes);
 app.use("/api/file",fileRoutes);
-
-
+app.use("/api/search",searchRoutes);
 const PORT = process.env.PORT || 3000;
 const start = async()=>{
   try{
