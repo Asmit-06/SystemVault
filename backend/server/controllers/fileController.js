@@ -176,3 +176,36 @@ export const getTrash = async(req,res)=>{
     return res.status(500).json({message:"Error fetching trash",error:err.message});
   }
 }
+
+export const restoreFile = async(req,res)=>{
+  try{
+    const file= await File.findOne({_id:req.params.id,owner:req.userId,isDeleted:true});
+    if(!file){
+      return res.status(404).json({message:"File not found in trash"});
+    }
+    file.isDeleted=false;
+    file.deletedAt=null;
+    await file.save();
+    return res.status(200).json({message:"File restored successfully",file:file});
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error restoring file",error:err.message});
+  }
+}
+
+export const permanentDeleteFile = async(req,res)=>{
+  try{
+    const file = await File.findOne({_id:req.params.id,owner:req.userId,isDeleted:true});
+    if(!file){
+      return res.status(404).json({message:"File not found in trash"});
+    }
+
+    const {publicId} = file;
+    await cloudinary.uploader.destroy(publicId);
+    const deletedFile = await file.deleteOne();
+    return res.status(200).json({message:"File permanently deleted successfully",file:deletedFile});
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error permanently deleting file",error:err.message});
+  }
+}
