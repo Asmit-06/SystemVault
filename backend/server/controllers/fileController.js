@@ -11,7 +11,7 @@ export const uploadFile = async (req, res) => {
     if (!folderId) {
       return res.status(400).json({ message: "Folder ID is required" });
     }
-    const folder = await Folder.findOne({ _id: folderId, owner: req.userId });
+    const folder = await Folder.findOne({ _id: folderId, owner: req.userId, isDeleted: false });
     if (!folder) {
       return res.status(400).json({ message: "Folder not found" });
     }
