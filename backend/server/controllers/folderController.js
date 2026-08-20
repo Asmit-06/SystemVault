@@ -159,3 +159,87 @@ export const permanentlyDeleteFolder = async(req,res)=>{
   }
     
 }
+
+export const moveFolder = async (req, res) => {
+  try {
+    const { newParentId } = req.body;
+
+    const folder = await Folder.findOne({
+      _id: req.params.id,
+      owner: req.userId,
+      isDeleted: false
+    });
+
+    if (!folder) {
+      return res.status(404).json({
+        message: "Folder not found"
+      });
+    }
+
+    if (newParentId) {
+
+      
+      const newParent = await Folder.findOne({
+        _id: newParentId,
+        owner: req.userId,
+        isDeleted: false
+      });
+
+      if (!newParent) {
+        return res.status(404).json({
+          message: "New parent folder not found"
+        });
+      }
+
+    
+      if (newParentId === folder._id.toString()) {
+        return res.status(400).json({
+          message: "Folder cannot be moved into itself"
+        });
+      }
+      let currentFolder = newParent;
+
+      while (currentFolder.parentFolder) {
+    
+        if (
+          currentFolder.parentFolder.toString() ===
+          folder._id.toString()
+        ) {
+          return res.status(400).json({
+            message: "Cannot move folder into its descendant"
+          });
+        }
+    
+        currentFolder = await Folder.findOne({
+          _id: currentFolder.parentFolder,
+          owner: req.userId,
+          isDeleted: false
+        });
+    
+        if (!currentFolder) {
+          break;
+        }
+      }
+
+      folder.parentFolder = newParentId;
+
+    } else {
+      folder.parentFolder = null;
+    }
+
+    await folder.save();
+
+    return res.status(200).json({
+      message: "Folder moved successfully",
+      folder
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      message: "Error moving folder",
+      error: err.message
+    });
+  }
+};
