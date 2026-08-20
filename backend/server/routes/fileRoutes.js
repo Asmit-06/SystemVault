@@ -11,7 +11,8 @@ import {
   downloadFile,
   getTrash,
   restoreFile,
-  permanentDeleteFile
+  permanentDeleteFile,
+  moveFile
 } from "../controllers/fileController.js";
 
 const router = express.Router();
@@ -27,6 +28,8 @@ router.get("/download/:id", protect, downloadFile);
 router.patch("/restore/:id", protect, restoreFile);
 
 router.delete("/permanent/:id", protect, permanentDeleteFile);
+
+router.patch("/move/:id", protect, moveFile);
 
 router.get("/:id", protect, getFileById);
 

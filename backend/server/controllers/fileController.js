@@ -209,3 +209,26 @@ export const permanentDeleteFile = async(req,res)=>{
     return res.status(500).json({message:"Error permanently deleting file",error:err.message});
   }
 }
+
+export const moveFile = async(req,res)=>{
+  try{
+    const file = await File.findOne({_id:req.params.id,owner:req.userId,isDeleted:false});
+    if(!file){
+      return res.status(404).json({message:"File not found"});
+    }
+    const{folderId} = req.body;
+    if(!folderId){
+      return res.status(400).json({message:"Folder ID is required"});
+    }
+    const folder = await Folder.findOne({_id:folderId,owner:req.userId,isDeleted:false});
+    if(!folder){
+      return res.status(404).json({message:"Folder not found"});
+    }
+    file.folder=folderId;
+    await file.save();
+    return res.status(200).json({message:"File moved successfully",file:file});
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({message:"Error moving file",error:err.message});
+  }
+}
