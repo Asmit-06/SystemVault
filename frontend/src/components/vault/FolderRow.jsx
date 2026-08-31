@@ -4,7 +4,7 @@ import { Folder, MoreVertical, Edit3, FolderInput, Trash2 } from 'lucide-react';
 import { useVault } from '../../context/VaultContext';
 import { formatDate } from '../../utils/formatters';
 
-export const FolderRow = ({ folder }) => {
+export const FolderRow = ({ folder, isFirst = false, isLast = false }) => {
   const navigate = useNavigate();
   const { setItemToRename, setItemToMove, setItemToDelete } = useVault();
   const [showMenu, setShowMenu] = useState(false);
@@ -29,7 +29,9 @@ export const FolderRow = ({ folder }) => {
   return (
     <div
       onClick={handleOpen}
-      className="group flex items-center justify-between px-4 py-2.5 bg-white dark:bg-[#121215] hover:bg-zinc-50 dark:hover:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 transition-colors cursor-pointer select-none"
+      className={`group relative flex items-center justify-between px-4 py-2.5 bg-white dark:bg-[#121215] hover:bg-zinc-50 dark:hover:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 last:border-b-0 transition-colors cursor-pointer select-none ${
+        isFirst ? 'rounded-t-2xl' : ''
+      } ${isLast ? 'rounded-b-2xl' : ''} ${showMenu ? 'z-40' : 'z-10'}`}
     >
       <div className="flex items-center space-x-3 truncate flex-1 mr-4">
         <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500">
@@ -49,13 +51,13 @@ export const FolderRow = ({ folder }) => {
         <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-700 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-700 transition-colors"
           >
             <MoreVertical className="w-3.5 h-3.5" />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 top-7 z-30 w-36 bg-white dark:bg-dark-surface border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-xl p-1 space-y-0.5 animate-scale-in text-xs">
+            <div className="absolute right-0 top-full mt-1.5 z-50 w-40 bg-white dark:bg-[#18181c] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1 space-y-0.5 animate-scale-in text-xs">
               <button
                 onClick={() => {
                   setShowMenu(false);

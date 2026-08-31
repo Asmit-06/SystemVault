@@ -29,7 +29,9 @@ export const FolderCard = ({ folder }) => {
   return (
     <div
       onClick={handleOpen}
-      className="group relative bg-white dark:bg-[#121215] border border-zinc-200/80 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-2xl p-4 transition-all duration-200 hover:shadow-card-hover cursor-pointer flex flex-col justify-between select-none"
+      className={`group relative bg-white dark:bg-[#121215] border border-zinc-200/80 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-2xl p-4 transition-all duration-200 hover:shadow-card-hover cursor-pointer flex flex-col justify-between select-none ${
+        showMenu ? 'z-40' : 'z-10'
+      }`}
     >
       <div className="flex items-start justify-between">
         <div className="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 text-amber-500 flex items-center justify-center transition-transform group-hover:scale-105">
@@ -46,7 +48,7 @@ export const FolderCard = ({ folder }) => {
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 top-7 z-30 w-36 bg-white dark:bg-dark-surface border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-xl p-1 space-y-0.5 animate-scale-in text-xs">
+            <div className="absolute right-0 top-full mt-1.5 z-50 w-40 bg-white dark:bg-[#18181c] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1 space-y-0.5 animate-scale-in text-xs">
               <button
                 onClick={() => {
                   setShowMenu(false);

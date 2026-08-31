@@ -13,7 +13,7 @@ import { getFileIcon } from '../../utils/fileIcons';
 import fileService from '../../services/fileService';
 import { useToast } from '../../context/ToastContext';
 
-export const FileRow = ({ file }) => {
+export const FileRow = ({ file, isFirst = false, isLast = false }) => {
   const { setPreviewFile, setItemToRename, setItemToMove, setItemToDelete } = useVault();
   const toast = useToast();
   const [showMenu, setShowMenu] = useState(false);
@@ -44,7 +44,9 @@ export const FileRow = ({ file }) => {
   return (
     <div
       onClick={() => setPreviewFile(file)}
-      className="group flex items-center justify-between px-4 py-2.5 bg-white dark:bg-[#121215] hover:bg-zinc-50 dark:hover:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 transition-colors cursor-pointer select-none"
+      className={`group relative flex items-center justify-between px-4 py-2.5 bg-white dark:bg-[#121215] hover:bg-zinc-50 dark:hover:bg-zinc-800/40 border-b border-zinc-100 dark:border-zinc-800/80 last:border-b-0 transition-colors cursor-pointer select-none ${
+        isFirst ? 'rounded-t-2xl' : ''
+      } ${isLast ? 'rounded-b-2xl' : ''} ${showMenu ? 'z-40' : 'z-10'}`}
     >
       <div className="flex items-center space-x-3 truncate flex-1 mr-4">
         <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex-shrink-0">
@@ -68,7 +70,7 @@ export const FileRow = ({ file }) => {
         <div className="flex items-center space-x-1" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={handleDownload}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors hidden sm:inline-flex"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors hidden sm:inline-flex"
             title="Download"
           >
             <Download className="w-3.5 h-3.5" />
@@ -78,13 +80,13 @@ export const FileRow = ({ file }) => {
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-700 transition-colors"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-700 transition-colors"
             >
               <MoreVertical className="w-3.5 h-3.5" />
             </button>
 
             {showMenu && (
-              <div className="absolute right-0 bottom-7 z-30 w-36 bg-white dark:bg-dark-surface border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-xl p-1 space-y-0.5 animate-scale-in text-xs">
+              <div className="absolute right-0 top-full mt-1.5 z-50 w-40 bg-white dark:bg-[#18181c] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1 space-y-0.5 animate-scale-in text-xs">
                 <button
                   onClick={() => {
                     setShowMenu(false);

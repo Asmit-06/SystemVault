@@ -73,6 +73,34 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const googleLogin = async (credential) => {
+    const data = await authService.googleAuth(credential);
+    if (data.accessToken) {
+      localStorage.setItem('systemvault_token', data.accessToken);
+      setToken(data.accessToken);
+      
+      try {
+        const fullUser = await authService.getMe();
+        setUser(fullUser);
+        localStorage.setItem('systemvault_user', JSON.stringify(fullUser));
+        return fullUser;
+      } catch {
+        const fallbackUser = {
+          _id: data._id,
+          name: data.name || data.email.split('@')[0],
+          email: data.email,
+          avatar: data.avatar || null,
+          usedStorage: data.usedStorage || 0,
+          storageLimit: data.storageLimit || 1073741824,
+        };
+        setUser(fallbackUser);
+        localStorage.setItem('systemvault_user', JSON.stringify(fallbackUser));
+        return fallbackUser;
+      }
+    }
+    return data;
+  };
+
   const register = async (name, email, password) => {
     const data = await authService.register({ name, email, password });
     if (data.accessToken) {
@@ -113,6 +141,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!token && !!user,
         isLoading,
         login,
+        googleLogin,
         register,
         logout,
         refreshUserProfile,
@@ -130,4 +159,3 @@ export const useAuth = () => {
   }
   return context;
 };
-

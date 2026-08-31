@@ -182,11 +182,13 @@ export const TrashPage = () => {
               <h3 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
                 Deleted Folders ({trashFolders.length})
               </h3>
-              <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 divide-y divide-zinc-100 dark:divide-zinc-800 overflow-hidden shadow-xs">
-                {trashFolders.map((folder) => (
+              <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 divide-y divide-zinc-100 dark:divide-zinc-800 shadow-xs">
+                {trashFolders.map((folder, idx) => (
                   <div
                     key={folder._id}
-                    className="flex items-center justify-between p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors"
+                    className={`flex items-center justify-between p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors ${
+                      idx === 0 ? 'rounded-t-2xl' : ''
+                    } ${idx === trashFolders.length - 1 ? 'rounded-b-2xl' : ''}`}
                   >
                     <div className="flex items-center space-x-3 truncate mr-4">
                       <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500">
@@ -233,11 +235,13 @@ export const TrashPage = () => {
               <h3 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
                 Deleted Files ({trashFiles.length})
               </h3>
-              <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 divide-y divide-zinc-100 dark:divide-zinc-800 overflow-hidden shadow-xs">
-                {trashFiles.map((file) => (
+              <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 divide-y divide-zinc-100 dark:divide-zinc-800 shadow-xs">
+                {trashFiles.map((file, idx) => (
                   <div
                     key={file._id}
-                    className="flex items-center justify-between p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors"
+                    className={`flex items-center justify-between p-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors ${
+                      idx === 0 ? 'rounded-t-2xl' : ''
+                    } ${idx === trashFiles.length - 1 ? 'rounded-b-2xl' : ''}`}
                   >
                     <div className="flex items-center space-x-3 truncate mr-4">
                       <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500">

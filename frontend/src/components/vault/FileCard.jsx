@@ -48,7 +48,9 @@ export const FileCard = ({ file }) => {
   return (
     <div
       onClick={() => setPreviewFile(file)}
-      className="group relative bg-white dark:bg-[#121215] border border-zinc-200/80 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-2xl p-3 transition-all duration-200 hover:shadow-card-hover cursor-pointer flex flex-col justify-between select-none"
+      className={`group relative bg-white dark:bg-[#121215] border border-zinc-200/80 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-2xl p-3 transition-all duration-200 hover:shadow-card-hover cursor-pointer flex flex-col justify-between select-none ${
+        showMenu ? 'z-40' : 'z-10'
+      }`}
     >
       {/* Top Media / Thumbnail Section */}
       <div className="relative w-full h-28 rounded-xl bg-zinc-100 dark:bg-zinc-900/80 overflow-hidden flex items-center justify-center mb-2.5">
@@ -111,7 +113,7 @@ export const FileCard = ({ file }) => {
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 bottom-7 z-30 w-36 bg-white dark:bg-dark-surface border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-xl p-1 space-y-0.5 animate-scale-in text-xs">
+            <div className="absolute right-0 bottom-full mb-1.5 sm:bottom-auto sm:top-full sm:mt-1.5 z-50 w-40 bg-white dark:bg-[#18181c] border border-zinc-200 dark:border-zinc-700/80 rounded-2xl shadow-2xl p-1 space-y-0.5 animate-scale-in text-xs">
               <button
                 onClick={() => {
                   setShowMenu(false);

@@ -237,9 +237,14 @@ export const DashboardPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden shadow-xs">
-                  {sortedFolders.map((folder) => (
-                    <FolderRow key={folder._id} folder={folder} />
+                <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs">
+                  {sortedFolders.map((folder, idx) => (
+                    <FolderRow
+                      key={folder._id}
+                      folder={folder}
+                      isFirst={idx === 0}
+                      isLast={idx === sortedFolders.length - 1}
+                    />
                   ))}
                 </div>
               )}
@@ -261,9 +266,14 @@ export const DashboardPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden shadow-xs">
-                  {filteredAndSortedFiles.map((file) => (
-                    <FileRow key={file._id} file={file} />
+                <div className="bg-white dark:bg-[#121215] rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs">
+                  {filteredAndSortedFiles.map((file, idx) => (
+                    <FileRow
+                      key={file._id}
+                      file={file}
+                      isFirst={idx === 0}
+                      isLast={idx === filteredAndSortedFiles.length - 1}
+                    />
                   ))}
                 </div>
               )}

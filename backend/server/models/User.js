@@ -1,32 +1,41 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name:{
+  name: {
     type: String,
     required: true,
   },
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true,
   },
-  password:{
+  password: {
     type: String,
-    required: true,
+    required: false,
+    default: null,
   },
-  usedStorage:{
+  googleId: {
+    type: String,
+    default: null,
+  },
+  avatar: {
+    type: String,
+    default: null,
+  },
+  usedStorage: {
     type: Number,
     default: 0,
   },
-  storageLimit:{
+  storageLimit: {
     type: Number,
     default: 1073741824, // 1 GB in bytes
   },
-  date:{
+  date: {
     type: Date,
     default: Date.now,
   }
-},{timestamps: true});
+}, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
 export default User;
